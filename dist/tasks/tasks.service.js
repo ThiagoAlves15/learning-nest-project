@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const task_model_1 = require("./task.model");
-const uuid = require("uuid/v1");
+const uuid_1 = require("uuid");
 let TasksService = class TasksService {
     constructor() {
         this.tasks = [];
@@ -16,15 +16,41 @@ let TasksService = class TasksService {
     getAllTasks() {
         return this.tasks;
     }
-    createTask(title, description) {
+    getTasksWithFilter(filterDto) {
+        const { status, search } = filterDto;
+        let tasks = this.getAllTasks();
+        if (status) {
+            tasks = tasks.filter(task => task.status = status);
+        }
+        if (search) {
+            tasks = tasks.filter(task => task.title.includes(search) ||
+                task.description.includes(search));
+        }
+        return tasks;
+    }
+    getTaskById(id) {
+        return this.tasks.find(task => task.id === id);
+    }
+    createTask(createTaskDto) {
+        const { title, description } = createTaskDto;
         const task = {
-            id: uuid(),
+            id: uuid_1.v1(),
             title,
             description,
             status: task_model_1.TaskStatus.OPEN,
         };
         this.tasks.push(task);
         return task;
+    }
+    updateTaskStatus(id, status) {
+        console.log(this.tasks);
+        const task = this.getTaskById(id);
+        task.status = status;
+        console.log(this.tasks);
+        return task;
+    }
+    deleteTask(id) {
+        this.tasks = this.tasks.filter(task => task.id !== id);
     }
 };
 TasksService = __decorate([
