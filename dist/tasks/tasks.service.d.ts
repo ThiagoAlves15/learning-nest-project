@@ -3,12 +3,13 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskRepository } from './task.repository';
 import { Task } from './task.entity';
+import { User } from 'src/auth/user.entity';
 export declare class TasksService {
     private taskRepository;
     constructor(taskRepository: TaskRepository);
-    getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>;
-    getTaskById(id: number): Promise<Task>;
-    createTask(createTaskDto: CreateTaskDto): Promise<Task>;
-    updateTaskStatus(id: number, status: TaskStatus): Promise<Task>;
-    deleteTask(id: number): Promise<void>;
+    getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>;
+    getTaskById(id: number, user: User): Promise<Task>;
+    createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task>;
+    updateTaskStatus(id: number, status: TaskStatus, user: User): Promise<Task>;
+    deleteTask(id: number, user: User): Promise<void>;
 }
